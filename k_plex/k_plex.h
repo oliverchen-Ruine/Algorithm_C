@@ -12,7 +12,7 @@ public:
 		: n(0)
 	{}
 
-	std::vector<float> k_plex_matrix_B(int node_num, string file_name);
+	std::vector<float> k_plex_matrix_B(int node_num, std::vector<int> nodes_list, std::string file_name);
 	void k_plex_matrix_mul(std::vector<float> K_plex_v, string file_name);//æÿ’Û≥À∑®
 	void k_plex_matrix_add(std::vector<float> K_plex_v, string file_name);//æÿ’Ûœ‡º”
 	

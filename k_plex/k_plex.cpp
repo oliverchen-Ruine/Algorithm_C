@@ -155,7 +155,7 @@ std::vector<std::vector<int>> K_plex_matrix::bfs_kplex(std::vector<int> nodes, i
 	return res;
 }
 
-std::vector<float> K_plex_matrix::k_plex_matrix_B(int node_num, string file_name)
+std::vector<float> K_plex_matrix::k_plex_matrix_B(int node_num, std::vector<int> nodes_list, string file_name)
 {
 	int k = 1;
 	std::shared_ptr<Matrix> m = std::make_shared<Matrix>(node_num, node_num);
@@ -186,7 +186,7 @@ std::vector<float> K_plex_matrix::k_plex_matrix_B(int node_num, string file_name
 
 	while (k < node_num - 1)
 	{
-		auto s = bfs_kplex({ 0 }, k);
+		auto s = bfs_kplex(nodes_list, k);
 
 		for (auto kp_i : s)
 		{
@@ -268,16 +268,17 @@ void K_plex_matrix::k_plex_matrix_add(std::vector<float> K_plex_v, string file_n
 		m_Bt.setElement(i, 0, K_plex_v[i]);
 	}
 
-	auto c = Matrix(K_plex_v.size(), K_plex_v.size());
+	auto C = Matrix(K_plex_v.size(), K_plex_v.size());
 	for (int i = 0; i < K_plex_v.size(); ++i) 
 	{
 		for (int j = 0; j < K_plex_v.size(); ++j) 
 		{
 			float v = (m_Bt.getElement(i, 0, false) + m_B.getElement(0, j, false)) / 2.0;
-			c.setElement(i, j, v);
+			C.setElement(i, j, v);
 		}
 	}
-	c.print();
+	//C.print();
+	writ_csv(file_name, C);
 }
 
 void main()
@@ -285,10 +286,10 @@ void main()
 	int node_num = 8;
 	
 	auto kp = std::make_shared<K_plex_matrix>();
-	auto B = kp->k_plex_matrix_B(node_num, "D:/vs/code/Algorithm/k_plex/test_small_network_edges.csv");
+	auto B = kp->k_plex_matrix_B(node_num, { 0 }, "D:/vs/code/process/k_plex/test_small_network_edges.csv");
 
-	kp->k_plex_matrix_mul(B,"D:/vs/code/Algorithm/k_plex/test_mul.csv");
-	kp->k_plex_matrix_add(B,"D:/vs/code/Algorithm/k_plex/test_add.csv");
+	kp->k_plex_matrix_mul(B,"D:/vs/code/process/k_plex/test_mul.csv");
+	kp->k_plex_matrix_add(B,"D:/vs/code/process/k_plex/test_add.csv");
 	
 
 	
